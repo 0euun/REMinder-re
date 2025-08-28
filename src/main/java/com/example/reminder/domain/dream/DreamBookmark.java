@@ -10,11 +10,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "dream_comment")
-public class DreamComment extends BaseEntity {
+@Table(name = "dream_bookmark", uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "dream_id"}))
+public class DreamBookmark extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dream_comment_id")
+    @Column(name = "dream_bookmark_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -24,12 +24,4 @@ public class DreamComment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "dream_id", nullable = false)
     private Dream dream;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
-    private DreamComment parentComment;
-
-    @Lob
-    @Column(nullable = false)
-    private String content;
 }

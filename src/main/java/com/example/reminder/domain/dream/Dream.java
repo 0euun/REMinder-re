@@ -1,48 +1,38 @@
 package com.example.reminder.domain.dream;
 
-import com.example.reminder.domain.user.User;
+import com.example.reminder.domain.member.Member;
 import com.example.reminder.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UpdateTimestamp;
-import java.sql.Timestamp;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Dream")
+@Table(name = "dream")
 public class Dream extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dream_id")
-    private Long dreamId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user")
-    private User user;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-    @Column(name = "title")
+    @Column(nullable = false, length = 50)
     private String title;
 
     @Lob
-    @Column(name = "content")
+    @Column(nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Column(nullable = false)
     private DreamType type;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
-
-    @Column(name = "is_public")
-    private Boolean isPublic;
-
-    public enum DreamType {
-        HAPPY, FUNNY, SAD, NIGHTMARE, ANNOYING, LUCID, NO_MEMORY
-    }
+    @Builder.Default
+    @Column(name = "is_public", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean isPublic = true;
 }

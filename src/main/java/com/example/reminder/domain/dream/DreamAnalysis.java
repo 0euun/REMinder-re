@@ -6,7 +6,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,13 +14,16 @@ public class DreamAnalysis extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dream_analysis_id")
-    private Long dreamAnalysisId;
+    private Long id;
 
     @Lob
     @Column(name = "analysis_text")
     private String analysisText;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dream")
+    @Column(name = "analysis_image")
+    private String analysisImage;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dream_id", nullable = false)
     private Dream dream;
 }
