@@ -1,5 +1,7 @@
-package com.example.reminder.domain;
+package com.example.reminder.domain.dream;
 
+import com.example.reminder.domain.user.User;
+import com.example.reminder.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -39,4 +41,8 @@ public class Dream extends BaseEntity {
 
     @Column(name = "is_public")
     private Boolean isPublic;
+
+    public enum DreamType {
+        HAPPY, FUNNY, SAD, NIGHTMARE, ANNOYING, LUCID, NO_MEMORY
+    }
 }

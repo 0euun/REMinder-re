@@ -1,4 +1,4 @@
-package com.example.reminder.domain;
+package com.example.reminder.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

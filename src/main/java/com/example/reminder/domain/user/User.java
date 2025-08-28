@@ -1,4 +1,4 @@
-package com.example.reminder.domain;
+package com.example.reminder.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,14 +14,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long userId;
+    private Long id;
 
-    @Column(name = "id", nullable = false)
-    private String id;
+    @Column(nullable = false)
+    private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "username", nullable = false)
+    @Column(nullable = false)
     private String username;
 }

@@ -1,5 +1,6 @@
-package com.example.reminder.domain;
+package com.example.reminder.domain.dream;
 
+import com.example.reminder.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

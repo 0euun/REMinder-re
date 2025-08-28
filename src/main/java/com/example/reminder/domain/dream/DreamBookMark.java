@@ -1,5 +1,7 @@
-package com.example.reminder.domain;
+package com.example.reminder.domain.dream;
 
+import com.example.reminder.domain.user.User;
+import com.example.reminder.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,12 +11,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "DreamComment")
-public class DreamComment extends BaseEntity {
+@Table(name = "DreamBookMark")
+public class DreamBookMark extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dream_comment_id")
-    private int dreamCommentId;
+    @Column(name = "dream_book_mark_id")
+    private Long dreamBookMarkId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
@@ -23,12 +25,4 @@ public class DreamComment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dream")
     private Dream dream;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment")
-    private DreamComment parentComment;
-
-    @Lob
-    @Column(name = "content")
-    private String content;
 }
