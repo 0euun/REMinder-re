@@ -17,7 +17,7 @@ public class DreamService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void createDream(DreamRequestDTO dreamRequestDTO) {
+    public String createDream(DreamRequestDTO dreamRequestDTO) {
         Member member = memberRepository.findById(1L).orElseThrow();
 
         Dream dream = Dream.builder()
@@ -28,6 +28,8 @@ public class DreamService {
                 .member(member)
                 .build();
         dreamRepository.save(dream);
+
+        return "꿈일기가 등록되었습니다.";
     }
 
     @Transactional(readOnly = true)
@@ -37,14 +39,18 @@ public class DreamService {
     }
 
     @Transactional
-    public void updateDream(Long id, DreamRequestDTO dreamRequestDTO) {
+    public String updateDream(Long id, DreamRequestDTO dreamRequestDTO) {
         Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
         dream.updateFromDTO(dreamRequestDTO);
+
+        return "꿈일기가 수정되었습니다.";
     }
 
     @Transactional
-    public void deleteDream(Long id) {
+    public String deleteDream(Long id) {
         Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
         dreamRepository.delete(dream);
+
+        return "꿈일기가 삭제되었습니다.";
     }
 }

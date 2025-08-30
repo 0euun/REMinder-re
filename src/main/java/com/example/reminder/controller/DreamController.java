@@ -16,8 +16,9 @@ public class DreamController {
 
     @Operation(summary = "꿈일기 작성", description = "꿈일기를 작성합니다.")
     @PostMapping
-    public void createDream(@RequestBody DreamRequestDTO dreamRequestDTO) {
-        dreamService.createDream(dreamRequestDTO);
+    public ResponseEntity<String> createDream(@RequestBody DreamRequestDTO dreamRequestDTO) {
+        String message = dreamService.createDream(dreamRequestDTO);
+        return ResponseEntity.ok(message);
     }
 
     @Operation(summary = "특정 꿈일기 조회", description = "특정 꿈일기를 조회합니다.")
@@ -28,15 +29,15 @@ public class DreamController {
 
     @Operation(summary = "꿈일기 수정", description = "꿈일기를 수정합니다.")
     @PutMapping("/{dreamId}")
-    public ResponseEntity<DreamResponseDTO> updateDream(@PathVariable Long dreamId, @RequestBody DreamRequestDTO dreamRequestDTO) {
-        dreamService.updateDream(dreamId, dreamRequestDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> updateDream(@PathVariable Long dreamId, @RequestBody DreamRequestDTO dreamRequestDTO) {
+        String message = dreamService.updateDream(dreamId, dreamRequestDTO);
+        return ResponseEntity.ok(message);
     }
 
     @Operation(summary = "꿈일기 삭제", description = "꿈일기를 삭제합니다.")
     @DeleteMapping("/{dreamId}")
-    public ResponseEntity<Void> deleteDream(@PathVariable Long dreamId) {
-        dreamService.deleteDream(dreamId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> deleteDream(@PathVariable Long dreamId) {
+        String message = dreamService.deleteDream(dreamId);
+        return ResponseEntity.ok(message);
     }
 }
