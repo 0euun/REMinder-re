@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/dreams")
@@ -25,6 +27,12 @@ public class DreamController {
     @GetMapping("/{dreamId}")
     public ResponseEntity<DreamResponseDTO> getDream(@PathVariable Long dreamId) {
         return ResponseEntity.ok().body(dreamService.getDream(dreamId));
+    }
+
+    @Operation(summary = "전체 꿈일기 조회", description = "전체 꿈일기를 조회합니다.")
+    @GetMapping
+    public ResponseEntity<List<DreamResponseDTO>> getAllDreams() {
+        return ResponseEntity.ok().body(dreamService.getAllDreams());
     }
 
     @Operation(summary = "꿈일기 수정", description = "꿈일기를 수정합니다.")

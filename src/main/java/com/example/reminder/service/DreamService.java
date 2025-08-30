@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class DreamService {
@@ -36,6 +39,12 @@ public class DreamService {
     public DreamResponseDTO getDream(Long id) {
         Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
         return DreamResponseDTO.from(dream);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DreamResponseDTO> getAllDreams() {
+        List<Dream> dreams = dreamRepository.findAll();
+        return dreams.stream().map(DreamResponseDTO::from).collect(Collectors.toList());
     }
 
     @Transactional
