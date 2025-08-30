@@ -1,4 +1,4 @@
-package com.example.reminder.global.entity.controller;
+package com.example.reminder.global.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
