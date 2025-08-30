@@ -35,4 +35,16 @@ public class DreamService {
         Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
         return DreamResponseDTO.from(dream);
     }
+
+    @Transactional
+    public void updateDream(Long id, DreamRequestDTO dreamRequestDTO) {
+        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
+        dream.updateFromDTO(dreamRequestDTO);
+    }
+
+    @Transactional
+    public void deleteDream(Long id) {
+        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
+        dreamRepository.delete(dream);
+    }
 }

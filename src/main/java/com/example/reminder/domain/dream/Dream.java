@@ -1,6 +1,7 @@
 package com.example.reminder.domain.dream;
 
 import com.example.reminder.domain.member.Member;
+import com.example.reminder.dto.DreamRequestDTO;
 import com.example.reminder.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,4 +36,11 @@ public class Dream extends BaseEntity {
     @Builder.Default
     @Column(name = "is_public", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean isPublic = true;
+
+    public void updateFromDTO(DreamRequestDTO dto) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+        this.type = dto.getType();
+        this.isPublic = dto.getIsPublic();
+    }
 }
