@@ -6,6 +6,7 @@ import com.example.reminder.dto.DreamRequestDTO;
 import com.example.reminder.dto.DreamResponseDTO;
 import com.example.reminder.repository.DreamRepository;
 import com.example.reminder.repository.MemberRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +19,13 @@ import java.util.stream.Collectors;
 public class DreamService {
     private final DreamRepository dreamRepository;
     private final MemberRepository memberRepository;
+    private final AuthService authService;
 
+    // 등록
     @Transactional
-    public String createDream(DreamRequestDTO dreamRequestDTO) {
-        Member member = memberRepository.findById(1L).orElseThrow();
+    public String createDream(DreamRequestDTO dreamRequestDTO, HttpSession session) {
+        Long memberId = authService.currentMemberId(session);
+        Member member = memberRepository.findById(memberId).orElseThrow();
 
         Dream dream = Dream.builder()
                 .title(dreamRequestDTO.getTitle())
@@ -35,31 +39,56 @@ public class DreamService {
         return "꿈일기가 등록되었습니다.";
     }
 
+    // 단일 조회
     @Transactional(readOnly = true)
     public DreamResponseDTO getDream(Long id) {
         Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
         return DreamResponseDTO.from(dream);
     }
 
+    // 전체 조회
     @Transactional(readOnly = true)
     public List<DreamResponseDTO> getAllDreams() {
         List<Dream> dreams = dreamRepository.findAll();
         return dreams.stream().map(DreamResponseDTO::from).collect(Collectors.toList());
     }
 
+    //자기가 쓴 글 조회
+    @Transactional(readOnly = true)
+    public List<DreamResponseDTO> getMyDreams(HttpSession session) {
+        Long memberId = authService.currentMemberId(session);
+        List<Dream> dreams = dreamRepository.findByMemberId(memberId);
+        return dreams.stream().map(DreamResponseDTO::from).collect(Collectors.toList());
+    }
+
+    // 수정
     @Transactional
-    public String updateDream(Long id, DreamRequestDTO dreamRequestDTO) {
+    public String updateDream(Long id, DreamRequestDTO dreamRequestDTO, HttpSession session) {
         Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
+        Long memberId = authService.currentMemberId(session);
+        enumOwner(dream, memberId);
         dream.updateFromDTO(dreamRequestDTO);
 
         return "꿈일기가 수정되었습니다.";
     }
 
+    // 삭제
     @Transactional
-    public String deleteDream(Long id) {
+    public String deleteDream(Long id, HttpSession session) {
         Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
+        Long memberId = authService.currentMemberId(session);
+        enumOwner(dream, memberId);
         dreamRepository.delete(dream);
 
         return "꿈일기가 삭제되었습니다.";
+    }
+
+    // 권한 확인
+    public void enumOwner(Dream dream, Long memberId) {
+        Long ownerId = dream.getMember().getId();
+
+        if (!ownerId.equals(memberId)) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
     }
 }

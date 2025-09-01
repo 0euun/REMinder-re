@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface DreamRepository extends JpaRepository<Dream, Long> {
     List<Dream> findByType(DreamType type);
+    List<Dream> findByMemberId(Long memberId);
 }

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final MemberRepository memberRepository;
 
+    // 로그인
     @Transactional
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO, HttpSession session) {
         Member member = memberRepository.findByUsername(loginRequestDTO.getUsername()).orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
@@ -29,12 +30,14 @@ public class AuthService {
                 .build();
     }
 
+    // 로그아웃
     @Transactional
     public String logout(HttpSession session) {
         session.invalidate();
         return "로그아웃 되었습니다.";
     }
 
+    // 로그인한 사용자 정보 조회
     @Transactional(readOnly = true)
     public LoginResponseDTO getMe(HttpSession session) {
         Object memberId = session.getAttribute("memberId");
@@ -48,5 +51,16 @@ public class AuthService {
                 .username(member.getUsername())
                 .profileImage(member.getProfileImage())
                 .build();
+    }
+
+    // 로그인한 사용자 member_id 조회
+    @Transactional(readOnly = true)
+    public Long currentMemberId(HttpSession session){
+        Object memberId = session.getAttribute("memberId");
+        if(memberId == null){
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
+
+        return (Long) memberId;
     }
 }
