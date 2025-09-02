@@ -3,6 +3,8 @@ package com.example.reminder.service;
 import com.example.reminder.domain.member.Member;
 import com.example.reminder.dto.LoginRequestDTO;
 import com.example.reminder.dto.LoginResponseDTO;
+import com.example.reminder.dto.RegisterRequestDTO;
+import com.example.reminder.dto.RegisterResponseDTO;
 import com.example.reminder.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,42 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
+
+    // 회원가입
+    @Transactional
+    public RegisterResponseDTO register(RegisterRequestDTO registerRequestDTO, HttpSession session) {
+        String username = registerRequestDTO.getUsername();
+        validateDuplicateUsername(username);
+
+        Member member = createMember(registerRequestDTO);
+        Member savedMember = memberRepository.save(member);
+
+        session.setAttribute("memberId", savedMember.getId());
+
+        return RegisterResponseDTO.builder()
+                .memberId(savedMember.getId())
+                .username(savedMember.getUsername())
+                .profileImage(savedMember.getProfileImage())
+                .build();
+    }
+
+    // 회원가입 username 중복 확인
+    private void validateDuplicateUsername(String username) {
+        boolean duplicated = memberRepository.existsByUsername(username);
+        if (duplicated) {
+            throw new RuntimeException("이미 사용 중인 이름입니다.");
+        }
+    }
+
+    // 회원가입 Member 생성
+    private Member createMember(RegisterRequestDTO registerRequestDTO) {
+        Member.MemberBuilder builder = Member.builder();
+        builder.username(registerRequestDTO.getUsername());
+        builder.password(registerRequestDTO.getPassword());
+        builder.profileImage(registerRequestDTO.getProfileImage());
+
+        return builder.build();
+    }
 
     // 로그인
     @Transactional
