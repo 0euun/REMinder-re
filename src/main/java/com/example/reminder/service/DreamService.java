@@ -25,7 +25,7 @@ public class DreamService {
     @Transactional
     public String createDream(DreamRequestDTO dreamRequestDTO, HttpSession session) {
         Long memberId = authService.currentMemberId(session);
-        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("사용자 정보가 없습니다."));
 
         Dream dream = Dream.builder()
                 .title(dreamRequestDTO.getTitle())
@@ -53,7 +53,7 @@ public class DreamService {
         return dreams.stream().map(DreamResponseDTO::from).collect(Collectors.toList());
     }
 
-    //자기가 쓴 글 조회
+    // 자기가 쓴 글 조회
     @Transactional(readOnly = true)
     public List<DreamResponseDTO> getMyDreams(HttpSession session) {
         Long memberId = authService.currentMemberId(session);
