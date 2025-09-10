@@ -35,4 +35,18 @@ public class DreamCommentController {
     public ResponseEntity<List<DreamCommentResponseDTO>> getDreamCommentsByDreamId(@PathVariable Long dreamId) {
         return ResponseEntity.ok().body(dreamCommentService.getDreamCommentsByDreamId(dreamId));
     }
+
+    @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
+    @PutMapping("/{commentId}")
+    public ResponseEntity<String> updateDreamComment(@PathVariable Long commentId, @RequestBody DreamCommentRequestDTO dreamCommentRequestDTO, HttpSession session) {
+        String message = dreamCommentService.updateDreamComment(commentId, dreamCommentRequestDTO, session);
+        return ResponseEntity.ok(message);
+    }
+
+    @Operation(summary = "댓글 삭제", description = "댓글을 삭제합니다.")
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteDreamComment(@PathVariable Long commentId, HttpSession session) {
+        String message = dreamCommentService.deleteDreamComment(commentId, session);
+        return ResponseEntity.ok(message);
+    }
 }

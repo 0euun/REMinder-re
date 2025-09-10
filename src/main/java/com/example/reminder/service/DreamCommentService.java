@@ -59,4 +59,35 @@ public class DreamCommentService {
 
         return dreamComments.stream().map(DreamCommentResponseDTO::from).collect(Collectors.toList());
     }
+
+    // 수정
+    @Transactional
+    public String updateDreamComment(Long commentId, DreamCommentRequestDTO dreamCommentRequestDTO, HttpSession session) {
+        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));
+        Long memberId = authService.currentMemberId(session);
+        enumCommentOwner(dreamComment, memberId);
+        dreamComment.updateCommentFromDTO(dreamCommentRequestDTO);
+
+        return "댓글이 수정되었습니다.";
+    }
+
+    // 삭제
+    @Transactional
+    public String deleteDreamComment(Long commentId, HttpSession session) {
+        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
+        Long memberId = authService.currentMemberId(session);
+        enumCommentOwner(dreamComment, memberId);
+        dreamCommentRepository.delete(dreamComment);
+
+        return "댓글이 삭제되었습니다.";
+    }
+
+    // 권한 확인
+    public void enumCommentOwner(DreamComment dreamComment, Long memberId) {
+        Long ownerId = dreamComment.getMember().getId();
+
+        if (!ownerId.equals(memberId)) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+    }
 }

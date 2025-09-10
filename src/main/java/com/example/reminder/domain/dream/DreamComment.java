@@ -1,6 +1,7 @@
 package com.example.reminder.domain.dream;
 
 import com.example.reminder.domain.member.Member;
+import com.example.reminder.dto.DreamCommentRequestDTO;
 import com.example.reminder.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,4 +33,8 @@ public class DreamComment extends BaseEntity {
     @Lob
     @Column(nullable = false)
     private String content;
+
+    public void updateCommentFromDTO(DreamCommentRequestDTO dto) {
+        this.content = dto.getContent();
+    }
 }
