@@ -44,10 +44,11 @@ public class DreamBookmarkService {
         return "북마크가 등록되었습니다.";
     }
 
-    // 북마크 단일 조회
+    // 특정 회원 북마크 단일 조회
     @Transactional(readOnly = true)
-    public DreamBookmarkResponseDTO  getDreamBookmark(Long dreamBookmarkId) {
-        DreamBookmark dreamBookmark = dreamBookmarkRepository.findById(dreamBookmarkId).orElseThrow(() -> new RuntimeException("북마크가 존재하지 않습니다."));
+    public DreamBookmarkResponseDTO  getDreamBookmark(Long dreamId, HttpSession session) {
+        Long memberId = authService.currentMemberId(session);
+        DreamBookmark dreamBookmark = dreamBookmarkRepository.findByMemberIdAndDreamId(memberId, dreamId).orElseThrow(() -> new RuntimeException("북마크가 존재하지 않습니다."));
         return DreamBookmarkResponseDTO.from(dreamBookmark);
     }
 

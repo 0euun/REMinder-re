@@ -25,10 +25,10 @@ public class DreamBookmarkController {
         return ResponseEntity.ok(message);
     }
 
-    @Operation(summary = "북마크 단일 조회", description = "특정 북마크를 조회합니다.")
+    @Operation(summary = "내 북마크 단일 조회", description = "사용자의 특정 북마크를 조회합니다.")
     @GetMapping("/{dreamBookmarkId}")
-    public ResponseEntity<DreamBookmarkResponseDTO> getDreamBookmark(@PathVariable Long dreamBookmarkId) {
-        return ResponseEntity.ok().body(dreamBookmarkService.getDreamBookmark(dreamBookmarkId));
+    public ResponseEntity<DreamBookmarkResponseDTO> getDreamBookmark(@PathVariable Long dreamBookmarkId, HttpSession session) {
+        return ResponseEntity.ok().body(dreamBookmarkService.getDreamBookmark(dreamBookmarkId, session));
     }
 
     @Operation(summary = "내 북마크 전체 조회", description = "사용자의 모든 북마크를 조회합니다.")
