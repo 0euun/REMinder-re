@@ -25,7 +25,7 @@ public class DreamService {
     @Transactional
     public String createDream(DreamRequestDTO dreamRequestDTO, HttpSession session) {
         Long memberId = authService.currentMemberId(session);
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("사용자 정보가 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
         Dream dream = Dream.builder()
                 .title(dreamRequestDTO.getTitle())
@@ -42,7 +42,7 @@ public class DreamService {
     // 단일 조회
     @Transactional(readOnly = true)
     public DreamResponseDTO getDream(Long id) {
-        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
+        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("꿈일기가 존재하지 않습니다."));
         return DreamResponseDTO.from(dream);
     }
 
@@ -64,7 +64,7 @@ public class DreamService {
     // 수정
     @Transactional
     public String updateDream(Long id, DreamRequestDTO dreamRequestDTO, HttpSession session) {
-        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
+        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("꿈일기가 존재하지 않습니다."));
         Long memberId = authService.currentMemberId(session);
         enumOwner(dream, memberId);
         dream.updateFromDTO(dreamRequestDTO);
@@ -75,7 +75,7 @@ public class DreamService {
     // 삭제
     @Transactional
     public String deleteDream(Long id, HttpSession session) {
-        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("Dream not found"));
+        Dream dream = dreamRepository.findById(id).orElseThrow(() -> new RuntimeException("꿈일기가 존재하지 않습니다."));
         Long memberId = authService.currentMemberId(session);
         enumOwner(dream, memberId);
         dreamRepository.delete(dream);

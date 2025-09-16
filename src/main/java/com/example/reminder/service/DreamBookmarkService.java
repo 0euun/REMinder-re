@@ -27,7 +27,7 @@ public class DreamBookmarkService {
     @Transactional
     public String creatDreamBookmark(Long dreamId, HttpSession session) {
         Long memberId = authService.currentMemberId(session);
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("사용자 정보가 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
         Dream dream = dreamRepository.findById(dreamId).orElseThrow(() -> new RuntimeException("꿈일기가 존재하지 않습니다."));
 
         boolean exists = dreamBookmarkRepository.existsByMemberIdAndDreamId(memberId, dreamId);

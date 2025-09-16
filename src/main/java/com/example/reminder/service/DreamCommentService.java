@@ -28,7 +28,7 @@ public class DreamCommentService {
     @Transactional
     public String createDreamComment(DreamCommentRequestDTO dreamCommentRequestDTO, HttpSession session) {
         Long memberId = authService.currentMemberId(session);
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("사용자 정보가 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
         Dream dream = dreamRepository.findById(dreamCommentRequestDTO.getDreamId()).orElseThrow(() -> new RuntimeException("꿈일기가 존재하지 않습니다."));
 
         DreamComment dreamComment = DreamComment.builder()
@@ -44,7 +44,7 @@ public class DreamCommentService {
     // 특정 꿈일기 댓글 단일 조회
     @Transactional(readOnly = true)
     public  DreamCommentResponseDTO getDreamComment(Long commentId) {
-        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
+        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다."));
         return DreamCommentResponseDTO.from(dreamComment);
     }
 
@@ -63,7 +63,7 @@ public class DreamCommentService {
     // 수정
     @Transactional
     public String updateDreamComment(Long commentId, DreamCommentRequestDTO dreamCommentRequestDTO, HttpSession session) {
-        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));
+        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다."));
         Long memberId = authService.currentMemberId(session);
         enumCommentOwner(dreamComment, memberId);
         dreamComment.updateCommentFromDTO(dreamCommentRequestDTO);
@@ -74,7 +74,7 @@ public class DreamCommentService {
     // 삭제
     @Transactional
     public String deleteDreamComment(Long commentId, HttpSession session) {
-        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
+        DreamComment dreamComment = dreamCommentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다."));
         Long memberId = authService.currentMemberId(session);
         enumCommentOwner(dreamComment, memberId);
         dreamCommentRepository.delete(dreamComment);
