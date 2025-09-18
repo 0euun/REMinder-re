@@ -20,9 +20,6 @@ public class DreamAnalysis extends BaseEntity {
     @Column(name = "analysis_text")
     private String analysisText;
 
-    @Column(name = "analysis_image")
-    private String analysisImage;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dream_id", nullable = false)
     private Dream dream;
