@@ -7,6 +7,7 @@ build/
 
 ### yml ###
 application-db.yml
+application-ai.yml
 
 ### STS ###
 .apt_generated
