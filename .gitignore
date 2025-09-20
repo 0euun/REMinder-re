@@ -6,8 +6,8 @@ build/
 !**/src/test/**/build/
 
 ### yml ###
-application-db.yml
-application-ai.yml
+/src/main/resources/application-db.yml
+/src/main/resources/application-ai.yml
 
 ### STS ###
 .apt_generated
