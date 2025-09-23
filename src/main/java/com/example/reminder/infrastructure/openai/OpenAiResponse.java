@@ -1,4 +1,4 @@
-package com.example.reminder.global.dto;
+package com.example.reminder.infrastructure.openai;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
